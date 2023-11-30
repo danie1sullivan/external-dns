@@ -480,9 +480,9 @@ func (im *DynamoDBRegistry) appendDelete(statements []*dynamodb.BatchStatementRe
 func (im *DynamoDBRegistry) executeStatements(ctx context.Context, statements []*dynamodb.BatchStatementRequest, handleErr func(request *dynamodb.BatchStatementRequest, response *dynamodb.BatchStatementResponse) error) error {
 	for len(statements) > 0 {
 		var chunk []*dynamodb.BatchStatementRequest
-		if len(statements) > 25 {
-			chunk = statements[:25]
-			statements = statements[25:]
+		if len(statements) > dynamodbMaxBatchSize {
+			chunk = statements[:dynamodbMaxBatchSize]
+			statements = statements[dynamodbMaxBatchSize:]
 		} else {
 			chunk = statements
 			statements = nil
